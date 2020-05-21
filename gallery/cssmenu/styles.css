@@ -13,6 +13,17 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  font: 13px/1.5em Helvetica, Arial, sans-serif;
+  font-style: normal;
+  font-variant-ligatures: normal;
+  font-variant-caps: normal;
+  font-variant-numeric: normal;
+  font-variant-east-asian: normal;
+  font-weight: normal;
+  font-stretch: normal;
+  font-size: 13px;
+  line-height: 1;
+  font-family: Helvetica, Arial, sans-serif;
 }
 #cssmenu {
   width: 220px;
@@ -44,7 +55,7 @@
   color: #d8f3f0;
 }
 #cssmenu ul > li.has-sub > a:after {
-  position: absolute;
+  /*position: absolute;
   right: 26px;
   top: 19px;
   z-index: 5;
@@ -57,10 +68,11 @@
   -moz-transition: all 0.1s ease-out;
   -ms-transition: all 0.1s ease-out;
   -o-transition: all 0.1s ease-out;
-  transition: all 0.1s ease-out;
+  transition: all 0.1s ease-out;*/
+  display: none;
 }
 #cssmenu ul > li.has-sub > a:before {
-  position: absolute;
+  /*position: absolute;
   right: 22px;
   top: 23px;
   display: block;
@@ -72,7 +84,8 @@
   -moz-transition: all 0.1s ease-out;
   -ms-transition: all 0.1s ease-out;
   -o-transition: all 0.1s ease-out;
-  transition: all 0.1s ease-out;
+  transition: all 0.1s ease-out;*/
+  display: none;
 }
 #cssmenu ul > li.has-sub.open > a:after,
 #cssmenu ul > li.has-sub.open > a:before {
