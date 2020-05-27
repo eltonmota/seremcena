@@ -440,6 +440,29 @@ px      68    160    252    */
 		margin-left: 33px;
 		width: 252px;
 	}
+
+	.partners {
+		height: 100%;
+	}
+
+	.partners > .wrapper > .row > .col1,
+	.partners > .wrapper > .row > .col2-responsive {
+		width: 100%;
+		text-align: center;
+	}
+
+	.partners > .wrapper > .row > .col2-responsive {
+		display: block;
+		padding-top: 200px;
+	}
+
+	.partners > .wrapper > .row > .col2 {
+		display: none;
+	}
+
+	.partners > .wrapper > .row > .author {
+		text-align: center;
+	}
 		
 }
 
