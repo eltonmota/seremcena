@@ -555,8 +555,22 @@ nav a{
 	transition: all 0.3s ease;
 }
 
-.featured figure .heading:hover{
+.featured figure .heading:hover {
 	color: #8c8c8c;
+}
+
+.featured figure p.heading{
+	text-decoration: none;
+	font-style: normal;
+	font-weight: normal;
+	color: #013c83;
+	font-size: 14px;
+	display: block;
+	height: 30px;
+}
+
+.featured figure p.heading:hover {
+	color: #013c83;
 }
 
 .featured figure .link{
