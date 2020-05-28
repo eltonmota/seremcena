@@ -1098,6 +1098,16 @@ aside.retractil #sidebar-content a:hover{
 	background: #8c8c8c !important;
 }
 
+a.read-more{
+	color: #b01117;
+	font-weight: bold;
+}
+
+a.read-more:hover{
+	color: #013c83;
+	font-weight: bold;
+}
+
 /* SIDEBAR ------------------------------------------------------------*/
 
 #sidebar{
