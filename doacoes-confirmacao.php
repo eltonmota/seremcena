@@ -1,4 +1,45 @@
 <!doctype html>
+<?php
+    
+    require 'MVC/Models/DonationsManager.php';
+
+    date_default_timezone_set('UTC');
+    $date = new DateTime('now');
+    $orderId = $date->format('dis') . substr($_POST['documento'], 0, 2);
+    $date->add(new DateInterval('P1D'));
+    $dataVencimento = $date->format('dmY');
+
+    $codEmp = "j0070519160001100000014514";
+    $chave = "2o1s0c7i2p0s0e4c";
+    $pedido = $orderId;
+    $valor = $_POST['valor'];
+    $emailSacado = $_POST['emailSacado'];
+    $nomeSacado = $_POST['nomeSacado'];
+    $codigoInscricao = $_POST['codigoInscricao'];
+    $numeroInscricao = $_POST['documento'];
+    $enderecoSacado = $_POST['endereco'] . "," . $_POST['numero'];
+    $bairroSacado = $_POST['bairro'];
+    $cepSacado = $_POST['cep'];
+    $cidadeSacado = $_POST['cidade'];
+    $estadoSacado = $_POST['estado'];
+    $urlRetorna = "/retorno.html";
+    $observacao = null;
+    $obsAd1 = null;
+    $obsAd2 = null;
+    $obsAd3 = null;
+
+    $donationData = array(
+        'valor'        => $valor, 
+        'nome'         => $nomeSacado, 
+        'email'        => $emailSacado, 
+        'documento'    => $numeroInscricao, 
+        'due_date'     => $dataVencimento,
+        'increment_id' => $pedido
+    );
+
+    $donationsManager = new DonationsManager();
+    $donationsManager->save($donationData);
+?>
 <html class="no-js">
 
 	<head>
@@ -75,16 +116,8 @@
 
 		<!--Mascaras-->
 		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-		<script type="text/javascript" src="js/jquery.maskMoney.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$("#valor").maskMoney({reverse: true, decimal:",", thousands:"."});
-				$("#valor").css('text-align','right');
-				$("#cel").mask("(99) 9 9999-9999");
-			});
-		</script>		
-
-	</head>
+        <script type="text/javascript" src="js/jquery.mask.min.js"></script>
+    </head>
 	
 	<body lang="en">
 	
@@ -93,7 +126,7 @@
 		<div id="mobile-nav-holder">
 			<div class="wrapper">
 				<ul id="mobile-nav">
-					<li  class="current-menu-item">
+					<li>
 						<a href="#">Ser em Cena</a>
 						<ul>
 							<li><a href="a-ong-ser-em-cena.html">A Associação</a></li>
@@ -106,21 +139,14 @@
 					<li><a href="afasia-ser-em-cena.html">Afasia</a></li>
 					<li><a href="#">Fotos e Vídeos</a>
 						<ul>
-							<li>
-								<a href="fotos-ser-em-cena.html">Fotos</a>
-								<ul>
-									<li><a href="fotos-galeria.html?gallery=1">Espetáculos</a></li>
-									<li><a href="fotos-galeria.html?gallery=2">Oficinas</a></li>
-									<li><a href="fotos-galeria.html?gallery=3">Passeios Culturais</a></li>
-								</ul>
-							</li>
+							<li><a href="fotos-ser-em-cena.html">Fotos</a></li>
 							<li><a href="videos-ser-em-cena.html">Vídeos</a></li>
 							<li><a href="materias-ser-em-cena.html">Matérias</a></li>
 						</ul>
 					</li>
 					<li><a href="doacoes-ser-em-cena.html">Doações</a></li>
 					<li><a href="parceiros-ser-em-cena.html">Parceiros</a></li>
-					<li><a href="contato-ser-em-cena.html">Contato</a></li>
+					<li class="current-menu-item"><a href="contato-ser-em-cena.html">Contato</a></li>
 				</ul>
 				<div id="nav-open"><a href="#">Menu</a></div>
 			</div>
@@ -136,7 +162,7 @@
 				
 				<nav>
 					<ul id="nav" class="sf-menu">
-						<li>
+						<li class="current-menu-item">
 							<a href="#">Ser em Cena</a>
 							<ul>
 								<li><a href="a-ong-ser-em-cena.html">A Associação</a></li>
@@ -152,9 +178,9 @@
 								<li>
 									<a href="#">Fotos</a>
 									<ul>
-										<li><a href="fotos-galeria.html?gallery=1">Espetáculos</a></li>
-										<li><a href="fotos-galeria.html?gallery=2">Oficinas</a></li>
-										<li><a href="fotos-galeria.html?gallery=3">Passeios Culturais</a></li>
+										<li><a href="fotos-espetaculos-ser-em-cena.html">Espetáculos</a></li>
+										<li><a href="fotos-oficinas-ser-em-cena.html">Oficinas</a></li>
+										<li><a href="fotos-passeios-ser-em-cena.html">Passeios Culturais</a></li>
 									</ul>
 								</li>
 								<li><a href="videos-ser-em-cena.html">Vídeos</a></li>
@@ -182,12 +208,12 @@
 			<div id="social-bar">
 				<ul>
 					<li>
-						<a href="https://www.facebook.com/ser.emcena.3"  title="Facebook"><img src="img/social/facebook_32.png"  alt="Facebook" /></a>
-					</li>
-					<li>
-						<a href="https://www.instagram.com/seremcena/" title="Instagram"><img src="img/social/instagram.png"  alt="Instagram" /></a>
+						<a href="http://www.facebook.com"  title="Facebook"><img src="img/social/facebook_32.png"  alt="Facebook" /></a>
 					</li>
 					<!--<li>
+						<a href="http://www.twitter.com" title="Tweeter"><img src="img/social/twitter_32.png"  alt="Facebook" /></a>
+					</li>
+					<li>
 						<a href="http://www.google.com"  title="Google +"><img src="img/social/google_plus_32.png" alt="Facebook" /></a>
 					</li>-->
 				</ul>
@@ -201,7 +227,7 @@
 			
 				<!-- masthead -->
 		        <div id="masthead">
-					<span class="head">Doações - Passo 1</span><span class="subhead">Faça sua Doação</span>
+					<span class="head">Doações - Passo 2</span><span class="subhead">Faça sua Doação</span>
 					<ul class="breadcrumbs">
 						<li><a href="index.html">home</a></li>
 						<li>/ doações</li>
@@ -212,15 +238,7 @@
 	        	<div id="page-content-full">
 	        		
 					<p>
-						No site da Ser em Cena, você que quer ajudar, pode fazer a sua colaboração e definir o valor, a frequencia e a forma de realizar a sua doação.
-					</p>
-
-					<p>
-						A sua doação é realmente muito importante para que possamos continuar fazendo os atendimentos gratuitos de pessoas portadoras de afasia, auxiliando-os em sua reabilitação e na sua inserção à vida comunitária.
-					</p>
-
-					<p>
-						Basta preencher os campos abaixo com seu nome completo, cpf e email, escolher o valor da doação (valor mínimo 20 reais), escolher a forma de pagamento (débito automático ou boleto bancário) e a frequencia de sua doação.
+						Com o seu cadastro em nosso banco de dados, você também receberá informativos sobre as atividades da Ser em Cena para que acompanhe nossas ações.
 					</p>
 
 				</div>
@@ -228,50 +246,47 @@
 	        	
 	        	
 	        	<!-- page content -->
-	        	<div id="page-content">
-					
-					<!-- form -->
-					<script type="text/javascript" src="js/form-validation.js"></script>
-					<form action="doacoes-endereco.php" id="contactForm" name="passo1" method="post">
-						<input type="hidden" name="acao" value="passo-1">
-						<h3 class="heading">Preencha o Formulário.</h3>
-						<div class="error"></div>
-						<fieldset>
-							<div>
-								<label>CPF</label>
-								<input type="radio" id="cpf" name="tipo" value="01" class="form-poshytip" title="CPF" checked/>
-								<label>CNPJ</label>
-								<input type="radio" id="cnpj" name="tipo" value="02" class="form-poshytip" title="CNPJ"/>
-							</div>
-							<br />
-							<div>
-								<input name="nome"  id="nome" type="text" class="form-poshytip" title="Digite seu Nome Completo" />
-								<label>Nome Completo</label>
-							</div>
-							<div>
-								<input name="documento"  id="documento" type="text" class="form-poshytip" title="Digite seu CPF/CNPJ" />
-								<label>CPF/CNPJ</label>
-							</div>
-							<div>								
-								<input name="valor"  id="valor" type="text" class="form-poshytip" title="Digite o Valor da Doação" />
-								<label>Valor</label>
-							</div>
-							<div>								
-								<input name="email"  id="email" type="text" class="form-poshytip" title="Digite seu E-mail" />
-								<label>E-mail</label>
-							</div>
-							
-							<p>
-								<ul class="list-buttons">
-									<li><a href="javascript:ValidarInformacoes('passo-1');" class="link-button blue">Próxima Etapa</a></li>
-								</ul>
-							</p>
-						</fieldset>
-						
-					</form>						
-	        		
+	        	<div id="page-content">										
+                    <p>Muito Obrigado <strong><?= $nomeSacado ?></strong>, clique em confirmar doação para ser redirecionado a página de pagameto.<br><br>
+                    <b style="font-size: 14px;">Habilite seu pop-up para poder efetuar o pagamento.</b><br><br>
+                    </p>
+                    <?php
+                        include "Itaucripto.php";
+                        $cripto = new Itaucripto();
+                        $dados = $cripto->geraDados(
+                            $codEmp, 
+                            $pedido, 
+                            $valor, 
+                            $observacao, 
+                            $chave, 
+                            $nomeSacado, 
+                            $codigoInscricao, 
+                            $numeroInscricao, 
+                            $enderecoSacado, 
+                            $bairroSacado, 
+                            $cepSacado, 
+                            $cidadeSacado, 
+                            $estadoSacado, 
+                            $dataVencimento, 
+                            $urlRetorna, 
+                            $obsAd1, 
+                            $obsAd2, 
+                            $obsAd3
+                        );
+                    ?>
+
+                    <form action="https://shopline.itau.com.br/shopline/shopline.aspx" method="post" id="pagamento" name="pagamento" onsubmit="carregabrw()" target="SHOPLINE">
+                        <input type="hidden"name="DC" value="<?php echo $dados; ?>">
+                        <input type="submit"name="Shopline" class="link-button blue" value="Confirma Doação">
+                    </form>
 	        	</div>
-	        	<!-- ENDS page content -->				
+                <!-- ENDS page content -->
+
+                <script language="JavaScript">
+                    function carregabrw() {
+                        window.open('', 'SHOPLINE', "toolbar=yes,menubar=yes,resizable=yes,status=no,scrollbars=yes,width=815,height=575");
+                    }
+                </script>
 			
 			</div>
 			<!-- ENDS content -->

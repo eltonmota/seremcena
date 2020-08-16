@@ -1,4 +1,11 @@
 <!doctype html>
+<?php
+    $valor = $_POST['valor'];
+    $emailSacado = $_POST['email'];
+    $nomeSacado = $_POST['nome'];
+    $codigoInscricao = $_POST['tipo'];
+    $documento = $_POST['documento'];
+?>
 <html class="no-js">
 
 	<head>
@@ -75,13 +82,73 @@
 
 		<!--Mascaras-->
 		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-		<script type="text/javascript" src="js/jquery.maskMoney.js"></script>
+		<script type="text/javascript" src="js/jquery.mask.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function() {
-				$("#valor").maskMoney({reverse: true, decimal:",", thousands:"."});
+				$("#valor").mask("00.000.000.000.000,00");
 				$("#valor").css('text-align','right');
 				$("#cel").mask("(99) 9 9999-9999");
+
+				$("#cep").on("keyup", function(event) {
+					var cep = $(this).val();
+					if (cep.length == 8) {
+						//Nova variável "cep" somente com dígitos.
+						var cep = cep.replace(/\D/g, '');
+
+						//Verifica se campo cep possui valor informado.
+						if (cep != "") {
+
+							//Expressão regular para validar o CEP.
+							var validacep = /^[0-9]{8}$/;
+
+							//Valida o formato do CEP.
+							if(validacep.test(cep)) {
+
+								//Preenche os campos com "..." enquanto consulta webservice.
+								$("#endereco").val("...");
+								$("#bairro").val("...");
+								$("#cidade").val("...");
+								$("#estado").val("...");
+
+								//Consulta o webservice viacep.com.br/
+								$.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+
+									if (!("erro" in dados)) {
+										//Atualiza os campos com os valores da consulta.
+										$("#endereco").val(dados.logradouro);
+										$("#bairro").val(dados.bairro);
+										$("#cidade").val(dados.localidade);
+										$("#estado").val(dados.uf);
+									} //end if.
+									else {
+										//CEP pesquisado não foi encontrado.
+										limpa_formulario_cep();
+										alert("CEP não encontrado.");
+									}
+								});
+							} //end if.
+							else {
+								//cep é inválido.
+								limpa_formulario_cep();
+								alert("Formato de CEP inválido.");
+							}
+						} //end if.
+						else {
+							//cep sem valor, limpa formulário.
+							limpa_formulario_cep();
+						}
+					}
+				});
 			});
+
+			function limpa_formulario_cep() {
+                // Limpa valores do formulário de cep.
+                $("#endereco").val("");
+				$("#bairro").val("");
+				$("#cep").val("");
+				$("#cidade").val("");
+				$("#estado").val("");
+            }
 		</script>		
 
 	</head>
@@ -93,7 +160,7 @@
 		<div id="mobile-nav-holder">
 			<div class="wrapper">
 				<ul id="mobile-nav">
-					<li  class="current-menu-item">
+					<li>
 						<a href="#">Ser em Cena</a>
 						<ul>
 							<li><a href="a-ong-ser-em-cena.html">A Associação</a></li>
@@ -106,21 +173,14 @@
 					<li><a href="afasia-ser-em-cena.html">Afasia</a></li>
 					<li><a href="#">Fotos e Vídeos</a>
 						<ul>
-							<li>
-								<a href="fotos-ser-em-cena.html">Fotos</a>
-								<ul>
-									<li><a href="fotos-galeria.html?gallery=1">Espetáculos</a></li>
-									<li><a href="fotos-galeria.html?gallery=2">Oficinas</a></li>
-									<li><a href="fotos-galeria.html?gallery=3">Passeios Culturais</a></li>
-								</ul>
-							</li>
+							<li><a href="fotos-ser-em-cena.html">Fotos</a></li>
 							<li><a href="videos-ser-em-cena.html">Vídeos</a></li>
 							<li><a href="materias-ser-em-cena.html">Matérias</a></li>
 						</ul>
 					</li>
 					<li><a href="doacoes-ser-em-cena.html">Doações</a></li>
 					<li><a href="parceiros-ser-em-cena.html">Parceiros</a></li>
-					<li><a href="contato-ser-em-cena.html">Contato</a></li>
+					<li class="current-menu-item"><a href="contato-ser-em-cena.html">Contato</a></li>
 				</ul>
 				<div id="nav-open"><a href="#">Menu</a></div>
 			</div>
@@ -136,7 +196,7 @@
 				
 				<nav>
 					<ul id="nav" class="sf-menu">
-						<li>
+						<li class="current-menu-item">
 							<a href="#">Ser em Cena</a>
 							<ul>
 								<li><a href="a-ong-ser-em-cena.html">A Associação</a></li>
@@ -152,9 +212,9 @@
 								<li>
 									<a href="#">Fotos</a>
 									<ul>
-										<li><a href="fotos-galeria.html?gallery=1">Espetáculos</a></li>
-										<li><a href="fotos-galeria.html?gallery=2">Oficinas</a></li>
-										<li><a href="fotos-galeria.html?gallery=3">Passeios Culturais</a></li>
+										<li><a href="fotos-espetaculos-ser-em-cena.html">Espetáculos</a></li>
+										<li><a href="fotos-oficinas-ser-em-cena.html">Oficinas</a></li>
+										<li><a href="fotos-passeios-ser-em-cena.html">Passeios Culturais</a></li>
 									</ul>
 								</li>
 								<li><a href="videos-ser-em-cena.html">Vídeos</a></li>
@@ -182,12 +242,12 @@
 			<div id="social-bar">
 				<ul>
 					<li>
-						<a href="https://www.facebook.com/ser.emcena.3"  title="Facebook"><img src="img/social/facebook_32.png"  alt="Facebook" /></a>
-					</li>
-					<li>
-						<a href="https://www.instagram.com/seremcena/" title="Instagram"><img src="img/social/instagram.png"  alt="Instagram" /></a>
+						<a href="http://www.facebook.com"  title="Facebook"><img src="img/social/facebook_32.png"  alt="Facebook" /></a>
 					</li>
 					<!--<li>
+						<a href="http://www.twitter.com" title="Tweeter"><img src="img/social/twitter_32.png"  alt="Facebook" /></a>
+					</li>
+					<li>
 						<a href="http://www.google.com"  title="Google +"><img src="img/social/google_plus_32.png" alt="Facebook" /></a>
 					</li>-->
 				</ul>
@@ -201,7 +261,7 @@
 			
 				<!-- masthead -->
 		        <div id="masthead">
-					<span class="head">Doações - Passo 1</span><span class="subhead">Faça sua Doação</span>
+					<span class="head">Doações - Passo 2</span><span class="subhead">Faça sua Doação</span>
 					<ul class="breadcrumbs">
 						<li><a href="index.html">home</a></li>
 						<li>/ doações</li>
@@ -212,15 +272,7 @@
 	        	<div id="page-content-full">
 	        		
 					<p>
-						No site da Ser em Cena, você que quer ajudar, pode fazer a sua colaboração e definir o valor, a frequencia e a forma de realizar a sua doação.
-					</p>
-
-					<p>
-						A sua doação é realmente muito importante para que possamos continuar fazendo os atendimentos gratuitos de pessoas portadoras de afasia, auxiliando-os em sua reabilitação e na sua inserção à vida comunitária.
-					</p>
-
-					<p>
-						Basta preencher os campos abaixo com seu nome completo, cpf e email, escolher o valor da doação (valor mínimo 20 reais), escolher a forma de pagamento (débito automático ou boleto bancário) e a frequencia de sua doação.
+						Com o seu cadastro em nosso banco de dados, você também receberá informativos sobre as atividades da Ser em Cena para que acompanhe nossas ações.
 					</p>
 
 				</div>
@@ -232,38 +284,44 @@
 					
 					<!-- form -->
 					<script type="text/javascript" src="js/form-validation.js"></script>
-					<form action="doacoes-endereco.php" id="contactForm" name="passo1" method="post">
-						<input type="hidden" name="acao" value="passo-1">
+					<form action="doacoes-confirmacao.php" id="contactForm" name="passo2" method="post">
+                        <input type="hidden" name="acao" value="passo-2">
+                        <input type="hidden" name="nomeSacado" value="<?= $_POST['nome'] ?>">
+                        <input type="hidden" name="emailSacado" value="<?= $_POST['email'] ?>">
+                        <input type="hidden" name="documento" value="<?= $_POST['documento'] ?>">
+                        <input type="hidden" name="valor" value="<?= $_POST['valor'] ?>">
+                        <input type="hidden" name="codigoInscricao" value="<?= $_POST['tipo'] ?>">
 						<h3 class="heading">Preencha o Formulário.</h3>
 						<div class="error"></div>
 						<fieldset>
-							<div>
-								<label>CPF</label>
-								<input type="radio" id="cpf" name="tipo" value="01" class="form-poshytip" title="CPF" checked/>
-								<label>CNPJ</label>
-								<input type="radio" id="cnpj" name="tipo" value="02" class="form-poshytip" title="CNPJ"/>
-							</div>
-							<br />
-							<div>
-								<input name="nome"  id="nome" type="text" class="form-poshytip" title="Digite seu Nome Completo" />
-								<label>Nome Completo</label>
+							<div>								
+								<input id="cep" name="cep" maxlength="8" type="text" class="form-poshytip" title="Digite seu CEP" />
+								<label>CEP&nbsp;</label>
+								<a href="http://www.buscacep.correios.com.br/sistemas/buscacep/BuscaCepEndereco.cfm" style="color: blue" target="_blank">(Não sei meu cep)</a>
 							</div>
 							<div>
-								<input name="documento"  id="documento" type="text" class="form-poshytip" title="Digite seu CPF/CNPJ" />
-								<label>CPF/CNPJ</label>
+								<input id="endereco" name="endereco" maxlength="40" type="text" class="form-poshytip" title="Digite seu Endereço" />
+								<label>Endereço</label>
+							</div>
+							<div>
+								<input id="numero" name="numero" maxlength="10" type="text" class="form-poshytip" title="Digite seu Número" />
+								<label>Número</label>
+							</div>
+							<div>
+								<input id="bairro" name="bairro" maxlength="15" type="text" class="form-poshytip" title="Digite seu Bairro" />
+								<label>Bairro</label>
 							</div>
 							<div>								
-								<input name="valor"  id="valor" type="text" class="form-poshytip" title="Digite o Valor da Doação" />
-								<label>Valor</label>
+								<input id="cidade" name="cidade" maxlength="15" type="text" class="form-poshytip" title="Digite sua Cidade" />
+								<label>Cidade</label>
 							</div>
 							<div>								
-								<input name="email"  id="email" type="text" class="form-poshytip" title="Digite seu E-mail" />
-								<label>E-mail</label>
-							</div>
-							
+								<input id="estado" name="estado" maxlength="15" type="text" class="form-poshytip" title="Digite seu Estado" />
+								<label>Estado</label>
+							</div>							
 							<p>
 								<ul class="list-buttons">
-									<li><a href="javascript:ValidarInformacoes('passo-1');" class="link-button blue">Próxima Etapa</a></li>
+									<li><a href="javascript:ValidarInformacoes('passo-2');" class="link-button blue">Próxima Etapa</a></li>
 								</ul>
 							</p>
 						</fieldset>

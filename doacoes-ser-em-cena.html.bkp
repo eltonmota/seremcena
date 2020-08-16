@@ -232,7 +232,7 @@
 					
 					<!-- form -->
 					<script type="text/javascript" src="js/form-validation.js"></script>
-					<form action="doacoes-endereco.php" id="contactForm" name="passo1" method="post">
+					<form action="gravar.asp" id="contactForm" name="passo1" method="post">
 						<input type="hidden" name="acao" value="passo-1">
 						<h3 class="heading">Preencha o Formulário.</h3>
 						<div class="error"></div>
