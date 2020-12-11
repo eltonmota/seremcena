@@ -1,13 +1,9 @@
-<!doctype html>
 <?php
-    
-    require 'MVC/Models/DonationsManager.php';
+    require $_SERVER['DOCUMENT_ROOT'] . '/MVC/Models/DonationsManager.php';
 
     date_default_timezone_set('UTC');
     $date = new DateTime('now');
     $orderId = $date->format('dis') . substr($_POST['documento'], 0, 2);
-    $date->add(new DateInterval('P1D'));
-    $dataVencimento = $date->format('dmY');
 
     $codEmp = "j0070519160001100000014514";
     $chave = "2o1s0c7i2p0s0e4c";
@@ -33,13 +29,14 @@
         'nome'         => $nomeSacado, 
         'email'        => $emailSacado, 
         'documento'    => $numeroInscricao, 
-        'due_date'     => $dataVencimento,
+        'due_date'     => "",
         'increment_id' => $pedido
     );
 
     $donationsManager = new DonationsManager();
     $donationsManager->save($donationData);
 ?>
+<!doctype html>
 <html class="no-js">
 
 	<head>
@@ -250,8 +247,8 @@
                     <p>Muito Obrigado <strong><?= $nomeSacado ?></strong>, clique em confirmar doação para ser redirecionado a página de pagameto.<br><br>
                     <b style="font-size: 14px;">Habilite seu pop-up para poder efetuar o pagamento.</b><br><br>
                     </p>
-                    <?php
-                        include "Itaucripto.php";
+					<?php
+						require 'Itaucripto.php';
                         $cripto = new Itaucripto();
                         $dados = $cripto->geraDados(
                             $codEmp, 
