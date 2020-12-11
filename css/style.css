@@ -1435,3 +1435,28 @@ footer #to-top:hover{ opacity: 0.7 }
 	text-align: right;
 	padding-top: 40px;
 }
+
+@media (min-width:481px) { 
+	.all-brands-2021 {
+		display: block !important;
+	}
+	.first-brands-2021-responsive {
+		display: none;
+	}
+	.government-brands-responsive {
+		display: none;
+	}
+}
+
+@media (max-width:480px) { 
+	/* smartphones, Android phones, landscape iPhone */ 
+	.all-brands-2021 {
+		display: none !important;
+	}
+	.first-brands-2021-responsive {
+		display: block;
+	}
+	.government-brands-responsive {
+		display: block;
+	}
+}
